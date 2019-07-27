@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, render_template
+from flask import Flask, request, redirect, render_template, session
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -6,6 +6,7 @@ app.config['DEBUG'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://blogz:MyNewPass@localhost:8889/blogz'
 app.config['SQLALCHEMY_ECHO'] = True
 db = SQLAlchemy(app)
+app.secret_key = 'Ab@CD#efG'
 
 
 
@@ -40,14 +41,7 @@ class Blog(db.Model):
 @app.route('/', methods=['POST', 'GET'])
 def index():
 
-    if request.method == 'POST':
-        blog_title = request.form['blog_title']
-        blog_post = request.form['blog_post']
-        new_blog = Blog(blog_title, blog_post)
-        db.session.add(new_blog)
-        db.session.commit()
-        return redirect('/?id={0}'.format(new_blog.id))
-        
+           
     post_id = request.args.get('id')    
     if post_id:
         singlepost=Blog.query.get(post_id)
@@ -60,6 +54,15 @@ def index():
 
 @app.route('/addPost', methods=['POST', 'GET'])
 def addPost():
+    if request.method == 'POST':
+        owner = User.query.filter_by(username = session['username']).first()
+        blog_title = request.form['blog_title']
+        blog_post = request.form['blog_post']
+        new_blog = Blog(blog_title, blog_post, owner)
+        db.session.add(new_blog)
+        db.session.commit()
+        blog_id = new_blog.id
+        return redirect('/?id={0}'.format(new_blog.id))
 
     return render_template('addPost.html')
 
@@ -81,7 +84,7 @@ def signup():
             db.session.add(user)
             db.session.commit()
             session['username'] = username
-            return redirect("/addpost")
+            return redirect('/addPost')
         else:
             return render_template('signup.html')
     return render_template('signup.html')
