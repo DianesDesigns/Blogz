@@ -62,7 +62,7 @@ def addPost():
         db.session.add(new_blog)
         db.session.commit()
         blog_id = new_blog.id
-        return redirect('/?id={0}'.format(new_blog.id))
+        return redirect('/blog?id={0}'.format(new_blog.id))
 
     return render_template('addPost.html')
 
@@ -108,10 +108,25 @@ def login():
         flash("username or password are incorrect")
         return redirect ('/login')
 
+
+@app.route('/blog', methods=['POST', 'GET'])
+def blogz():
+    if request.args.get('id'):
+        blog_id=int(request.args.get('id'))
+        info = Blog.query.get(blog_id)
+        return render_template("singlepost.html", info=info)
+    else:
+
+
+        blogs = User.query.all()
+        return render_template('blogposts.html', blogs=blogs)
+
+
 #@app.route('/index', methods=['POST', 'GET'])
-#@app.route('/logout', methods=['POST'])
-#def Logout():    
-#    return redirect('/?blog')
+@app.route('/logout')
+def Logout():    
+    del session ['username']
+    return redirect('/blog')
 
 if __name__ == '__main__':
     app.run()

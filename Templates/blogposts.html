@@ -20,11 +20,6 @@
                     </style>
                 </head>
 
-
-                <form action= /addPost>
-            <input type="submit" value='Add Blog Post' />
-    </form>
-
     <hr />
 
     {% if blogs|length == 0 %}
@@ -33,12 +28,9 @@
 
         <ul>
             {% for blog in blogs %}
-            <li><a href="/?id={{blog.id}}">{{blog.blog_title}}</a>
+            <li><a href="/blog?id={{blog.id}}">{{blog.blog_title}}</a>
                 <br>
                     {{blog.blog_post}}
-                <form method="POST" action="/delete-blog" style="display:inline-block;">
-                    <input type="hidden" name="blog-id" value="{{blog.id}}" />
-                </form>
             </li>
             {% endfor %}
         </ul>
