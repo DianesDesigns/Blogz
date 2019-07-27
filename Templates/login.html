@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+    <style>
+        br {margin-bottom: 20px;}
+    </style>
+
+    <form method='POST'>
+
+            <label>Username<input name="username" type="text">
+                </label>
+                <br>
+                <label>Password
+                    <input name="user-password" type="password">
+                </label>
+        
+        <br>
+        
+        <input type="submit" />
+        
+    </form>
+
+    {% endblock %}
