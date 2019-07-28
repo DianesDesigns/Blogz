@@ -2,7 +2,10 @@
 <html>
     <head>
         <title>{{title}}</title>
-        <style>
+        <style type="text/css">
+            .error {
+                color: red;
+            }
            
             form{
                 background-color: #eee;
@@ -17,16 +20,28 @@
                 width: 540px;
                 height: 120px;           
             }
+            <style type="text/css">
+            .error {
+                color: red;
+            }
+        </style>
         </style>    
         
     </head>
 <body>
     <a href="/">Home</a>
-    <a href="/">all posts</a>
+    <a href="/allPosts">all posts</a>
     <a href="/addPost">new post</a>
     <a href="/signup">signup</a>
-    <a href="/">login</a>
-    <a href="/">logout</a>
+    <a href="/login">login</a>
+    <a href="/logout">logout</a>
+    {% with messages=get_flashed_messages()%}
+        {% if messages %}
+            {% for message in messages %}
+                <h3>{{ message }}</h3>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
     {% block content %}
     {% endblock %}
 
